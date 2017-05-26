@@ -17,6 +17,14 @@ var(
         "downloadButtonText":"下载",
         "FileDialogTitle":"选择源文件",
     }
+    downloadConfig = map[string]string{
+        "url":"",
+        "staticSourceFile":"",
+        "targetFileName":"index.html",
+        "targetDir":"html",
+        "logFileName":"download.log",
+        "savePathName":"0",
+    }
 )
 
 func main() {
@@ -63,10 +71,12 @@ func main() {
                 Layout:HBox{},
                 Children: []Widget{
                     PushButton{AssignTo:&downloadButton, Text:lang["downloadButtonText"], OnClicked:func(){
-                        downloadButton.SetEnabled(false)
-                        download(logTextEdit)
-                        time.Sleep(2*time.Second)
-                        downloadButton.SetEnabled(true)
+                        go func() {
+                            downloadButton.SetEnabled(false)
+                            download(logTextEdit)
+                            time.Sleep(2 * time.Second)
+                            downloadButton.SetEnabled(true)
+                        }()
                     }},
                 },
             },
