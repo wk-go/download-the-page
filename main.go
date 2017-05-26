@@ -6,6 +6,18 @@ import (
     "time"
     "os"
 )
+var(
+    lang=map[string]string{
+        "mainWindowTitle": "一个简易的网页下载器",
+        "targetUrlLabel": "目标网址",
+        "sourceFileLabel":"本地源文件",
+        "selectFileButtonText":"浏览",
+        "clearFileButtonText":"清除",
+        "targetFileNameLabel":"保存文件名",
+        "downloadButtonText":"下载",
+        "FileDialogTitle":"选择源文件",
+    }
+)
 
 func main() {
     var targetUrlLineEdit,sourceFileLineEdit, targetFileNameLineEdit *walk.LineEdit
@@ -16,26 +28,26 @@ func main() {
     var mw = &walk.MainWindow{}
     MainWindow{
         AssignTo: &mw,
-        Title: "Web Page Downloader",
+        Title: lang["mainWindowTitle"],
         Layout: VBox{},
         MinSize: Size{600, 400},
         Children:[]Widget{
             Composite{
                 Layout:HBox{},
                 Children:[]Widget{
-                    Label{AssignTo:&targetUrlLabel,Text:"目标网址:",MinSize:labelMinSize},
+                    Label{AssignTo:&targetUrlLabel,Text:lang["targetUrlLabel"]+":",MinSize:labelMinSize},
                     LineEdit{AssignTo:&targetUrlLineEdit},
                 },
             },
             Composite{
                 Layout:HBox{},
                 Children: []Widget{
-                    Label{AssignTo:&sourceFileLabel,Text:"本地源文件:",MinSize:labelMinSize},
+                    Label{AssignTo:&sourceFileLabel,Text:lang["sourceFileLabel"]+":",MinSize:labelMinSize},
                     LineEdit{AssignTo:&sourceFileLineEdit},
-                    PushButton{AssignTo:&selectFileButton,Text:"浏览",OnClicked:func(){
+                    PushButton{AssignTo:&selectFileButton,Text:lang["selectFileButtonText"],OnClicked:func(){
                         selectFile(sourceFileLineEdit,mw)
                     }},
-                    PushButton{AssignTo:&clearFileButton, Text:"清除", OnClicked:func(){
+                    PushButton{AssignTo:&clearFileButton, Text:lang["clearFileButtonText"], OnClicked:func(){
                         clearFile(sourceFileLineEdit)
                     }},
                 },
@@ -43,14 +55,14 @@ func main() {
             Composite{
                 Layout:HBox{},
                 Children:[]Widget{
-                    Label{AssignTo:&targetFileNameLabel,Text:"保存文件名:",MinSize:labelMinSize},
+                    Label{AssignTo:&targetFileNameLabel,Text:lang["targetFileNameLabel"]+":",MinSize:labelMinSize},
                     LineEdit{AssignTo:&targetFileNameLineEdit},
                 },
             },
             Composite{
                 Layout:HBox{},
                 Children: []Widget{
-                    PushButton{AssignTo:&downloadButton, Text:"下载", OnClicked:func(){
+                    PushButton{AssignTo:&downloadButton, Text:lang["downloadButtonText"], OnClicked:func(){
                         downloadButton.SetEnabled(false)
                         download(logTextEdit)
                         time.Sleep(2*time.Second)
@@ -71,7 +83,7 @@ func main() {
 func selectFile(showEdit *walk.LineEdit,mw *walk.MainWindow){
     showEdit.SetText("hello world");
     currPath,_ := os.Getwd()
-    f := walk.FileDialog{Title:"选择源文件", InitialDirPath: currPath}
+    f := walk.FileDialog{Title:lang["FileDialogTitle"], InitialDirPath: currPath}
     if o,_ := f.ShowOpen(mw); o{
         showEdit.SetText(f.FilePath)
     }
